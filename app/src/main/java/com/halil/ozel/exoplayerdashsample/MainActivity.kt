@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.halil.ozel.exoplayerdashsample.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -24,16 +26,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun preparePlayer() {
         exoPlayer = ExoPlayer.Builder(this).build()
-        exoPlayer?.playWhenReady = true
-        binding.playerView.player = exoPlayer
-        val defaultHttpDataSourceFactory = DefaultHttpDataSource.Factory()
-        val mediaItem = MediaItem.fromUri(URL)
-        val mediaSource =
-            DashMediaSource.Factory(defaultHttpDataSourceFactory).createMediaSource(mediaItem)
-        exoPlayer?.setMediaSource(mediaSource)
-        exoPlayer?.seekTo(playbackPosition)
-        exoPlayer?.playWhenReady = playWhenReady
-        exoPlayer?.prepare()
+        exoPlayer?.let { exoPlayer ->
+            exoPlayer.playWhenReady = true
+            binding.playerView.player = exoPlayer
+            exoPlayer.setMediaSource(setMediaType())
+            exoPlayer.seekTo(playbackPosition)
+            exoPlayer.playWhenReady = playWhenReady
+            exoPlayer.prepare()
+        }
     }
 
     private fun releasePlayer() {
@@ -43,6 +43,13 @@ class MainActivity : AppCompatActivity() {
             player.release()
             exoPlayer = null
         }
+    }
+
+    private fun setMediaType(): MediaSource {
+        val defaultHttpDataSourceFactory = DefaultHttpDataSource.Factory()
+        val mediaItem = MediaItem.fromUri(URL)
+        return DashMediaSource.Factory(defaultHttpDataSourceFactory)
+            .createMediaSource(mediaItem)
     }
 
     override fun onStop() {
