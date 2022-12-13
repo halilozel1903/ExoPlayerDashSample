@@ -9,7 +9,6 @@ import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.halil.ozel.exoplayerdashsample.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var exoPlayer: ExoPlayer? = null
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val URL =
+        private const val URL =
             "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
     }
 }
